@@ -1,3 +1,21 @@
-import ApiError from './ApiError';
+import {
+  ApiError,
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  ValidationError,
+  InternalServerError
+} from './ApiError';
 
-export { ApiError };
+export {
+  ApiError,
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  ValidationError,
+  InternalServerError
+};
