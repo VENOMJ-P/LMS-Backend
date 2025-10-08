@@ -15,8 +15,7 @@ Base URL: `/api/v1`
   {
     "email": "string",
     "password": "string",
-    "fullName": "string",
-    "phone": "string" // optional
+    "fullName": "string"
   }
   ```
 - **Functionality**: Creates a new user account and sends a welcome email to the provided email address.
@@ -78,12 +77,11 @@ Base URL: `/api/v1`
   ```json
   {
     "fullName": "string", // optional
-    "phone": "string", // optional
     "status": "string", // optional (active, blocked, suspended)
     "role": "string" // optional (user, admin)
   }
   ```
-- **Functionality**: Updates user details (e.g., name, phone, status, role). Sends an in-app notification to the user on status change.
+- **Functionality**: Updates user details (e.g., name, status, role). Sends an in-app notification to the user on status change.
 - **Response**: `{ success: true, data: { user }, message: "User updated successfully" }`
 
 ### Suspend User
