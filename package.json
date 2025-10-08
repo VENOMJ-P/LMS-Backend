@@ -6,7 +6,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "format:fix": "prettier \"src/**/*.ts\" --write --log-level silent",
-    "prepare": "husky",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "build": "tsc",
     "start": "node ./dist/src/server.js",
     "dev": "concurrently \"tsc -w\" \"nodemon ./src/server.ts\"",
