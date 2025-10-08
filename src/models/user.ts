@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { config } from '../configs';
 
 export enum UserRole {
-  PATRON = 'patron',
+  USER = 'user',
   ADMIN = 'admin'
 }
 
@@ -20,6 +20,9 @@ export interface IUser extends Document {
   fullName: string;
   role: UserRole;
   status: UserStatus;
+  currentBorrowings: mongoose.Types.ObjectId[]; // Refs to Borrowing
+  borrowingHistory: mongoose.Types.ObjectId[]; // Refs to Borrowing
+  fines: mongoose.Types.ObjectId[]; // Refs to Fine
   refreshToken?: string;
   lastLogin?: Date;
   createdAt: Date;
@@ -53,13 +56,31 @@ const userSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: Object.values(UserRole),
-      default: UserRole.PATRON
+      default: UserRole.USER
     },
     status: {
       type: String,
       enum: Object.values(UserStatus),
       default: UserStatus.ACTIVE
     },
+    currentBorrowings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Borrowing'
+      }
+    ],
+    borrowingHistory: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Borrowing'
+      }
+    ],
+    fines: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Fine'
+      }
+    ],
     refreshToken: {
       type: String,
       select: false

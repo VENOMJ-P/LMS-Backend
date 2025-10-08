@@ -31,7 +31,7 @@ export class AuthService {
       email: data.email,
       password: data.password,
       fullName: data.fullName,
-      role: UserRole.PATRON,
+      role: UserRole.USER,
       status: UserStatus.ACTIVE
     });
 
