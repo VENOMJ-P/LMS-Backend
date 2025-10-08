@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import cloudinary from 'cloudinary';
 
 dotenv.config();
 
@@ -25,7 +26,25 @@ export const config = {
   },
   logging: {
     level: process.env.LOG_LEVEL || 'info'
+  },
+  cloudinary: {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  },
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+    from: process.env.FROM_EMAIL || 'no-reply@lms.com'
   }
 };
+
+cloudinary.v2.config({
+  cloud_name: config.cloudinary.cloud_name,
+  api_key: config.cloudinary.api_key,
+  api_secret: config.cloudinary.api_secret
+});
 
 export default config;

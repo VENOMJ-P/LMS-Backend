@@ -7,6 +7,7 @@ import { config } from './configs';
 import { errorHandler } from './middlewares';
 import logger from './utils/logger';
 import api_routes from './routes';
+import './jobs';
 
 const app = express();
 

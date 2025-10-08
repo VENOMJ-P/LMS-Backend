@@ -11,7 +11,9 @@ import { Group, GroupStatus } from '../models/group';
 import { Fine, FineType } from '../models/fine';
 import { Settings } from '../models/settings';
 import { BadRequestError, NotFoundError, ForbiddenError } from '../utils/Error';
+import { sendNotification } from '../utils/notifications';
 import logger from '../utils/logger';
+import { NotificationType } from '../models/notification';
 import { Types } from 'mongoose';
 
 interface BorrowingData {
@@ -80,6 +82,13 @@ export class BorrowingService {
       group!.currentBorrowing = borrowing._id as ObjectId;
       await group!.save();
     }
+
+    await sendNotification(
+      user,
+      'Book Borrowed',
+      `You have borrowed "${book.title}". Due date: ${dueDate.toDateString()}`,
+      NotificationType.INFO
+    );
     logger.info(`Book borrowed: ${book.title} by ${user.email}`);
     return borrowing;
   }
@@ -181,6 +190,19 @@ export class BorrowingService {
       );
       user!.fines.push(fine._id as ObjectId);
       await user!.save();
+      await sendNotification(
+        user!,
+        'Book Returned with Fine',
+        `Book "${book.title}" returned. Fine: ₹${totalFine}`,
+        NotificationType.WARNING
+      );
+    } else {
+      await sendNotification(
+        await User.findById(borrowing.borrower || (await Group.findById(borrowing.group))?.leader),
+        'Book Returned',
+        `Book "${book.title}" returned successfully`,
+        NotificationType.INFO
+      );
     }
 
     book.availableCopies += 1;
@@ -213,6 +235,15 @@ export class BorrowingService {
       throw new BadRequestError('New due date must be later than current');
     borrowing.dueDate = dueDate;
     await borrowing.save();
+    const user = await User.findById(
+      borrowing.borrower || (await Group.findById(borrowing.group))?.leader
+    );
+    await sendNotification(
+      user!,
+      'Borrowing Extended',
+      `Due date for "${(await Book.findById(borrowing.book))?.title}" extended to ${dueDate.toDateString()}`,
+      NotificationType.INFO
+    );
     return borrowing;
   }
 
@@ -256,6 +287,12 @@ export class BorrowingService {
     borrowing.fine = fine._id as ObjectId;
     await borrowing.save();
 
+    await sendNotification(
+      user!,
+      'Book Lost',
+      `Book "${book.title}" marked as lost. Fine: ₹${fine.totalFine}`,
+      NotificationType.ERROR
+    );
     logger.info(`Book marked as lost: ${book.title} by admin ${adminId}`);
     return borrowing;
   }

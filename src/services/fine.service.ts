@@ -1,7 +1,9 @@
 import { Fine, IFine } from '../models/fine';
 import { UserRole } from '../models/user';
 import { NotFoundError, ForbiddenError, BadRequestError } from '../utils/Error';
+import { sendNotification } from '../utils/notifications';
 import logger from '../utils/logger';
+import { NotificationType } from '../models/notification';
 
 interface UpdateFineData {
   totalFine?: number;
@@ -48,6 +50,12 @@ export class FineService {
     fine.paidDate = new Date();
     await fine.save();
 
+    await sendNotification(
+      fine.user as any,
+      'Fine Paid',
+      `Your fine of ₹${fine.totalFine} has been paid`,
+      NotificationType.INFO
+    );
     logger.info(`Fine paid: ${id} by ${userId}`);
     return fine;
   }
@@ -65,6 +73,12 @@ export class FineService {
     fine.paidDate = new Date();
     await fine.save();
 
+    await sendNotification(
+      fine.user as any,
+      'Fine Waived',
+      `Your fine of ₹${fine.totalFine} has been waived`,
+      NotificationType.INFO
+    );
     logger.info(`Fine waived: ${id}`);
     return fine;
   }
@@ -82,6 +96,12 @@ export class FineService {
     fine.totalFine = (fine.lateFee || 0) + (fine.damageFine || 0) + (fine.missingFine || 0);
     await fine.save();
 
+    await sendNotification(
+      fine.user as any,
+      'Fine Updated',
+      `Your fine has been updated to ₹${fine.totalFine}`,
+      NotificationType.WARNING
+    );
     logger.info(`Fine updated: ${id}`);
     return fine;
   }

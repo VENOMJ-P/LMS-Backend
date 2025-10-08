@@ -2,9 +2,10 @@ import { Group, GroupStatus, IGroup } from '../models/group';
 import { User, UserRole } from '../models/user';
 import { Settings } from '../models/settings';
 import { BadRequestError, NotFoundError, ForbiddenError } from '../utils/Error';
+import { sendNotification } from '../utils/notifications';
 import logger from '../utils/logger';
+import { NotificationType } from '../models/notification';
 import { Types } from 'mongoose';
-
 
 interface GroupData {
   name: string;
@@ -36,6 +37,14 @@ export class GroupService {
       status: GroupStatus.PENDING
     });
 
+    for (const user of users) {
+      await sendNotification(
+        user,
+        'Group Creation',
+        `You have been added to group "${data.name}". Awaiting admin approval.`,
+        NotificationType.INFO
+      );
+    }
 
     logger.info(`Group created: ${data.name} by ${userId}`);
     return group;
@@ -118,6 +127,15 @@ export class GroupService {
     group.status = GroupStatus.APPROVED;
     await group.save();
 
+    for (const user of [group.leader, ...group.members]) {
+      await sendNotification(
+        user as any,
+        'Group Approved',
+        `Group "${group.name}" has been approved`,
+        NotificationType.INFO
+      );
+    }
+
     logger.info(`Group approved: ${id}`);
     return group;
   }
@@ -130,6 +148,14 @@ export class GroupService {
     group.status = GroupStatus.REJECTED;
     await group.save();
 
+    for (const user of [group.leader, ...group.members]) {
+      await sendNotification(
+        user as any,
+        'Group Rejected',
+        `Group "${group.name}" has been rejected`,
+        NotificationType.WARNING
+      );
+    }
 
     logger.info(`Group rejected: ${id}`);
     return group;
