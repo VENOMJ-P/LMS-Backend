@@ -1,4 +1,3 @@
-// New FILE: src/models/group.ts
 import mongoose, { Document, Schema } from 'mongoose';
 
 export enum GroupStatus {

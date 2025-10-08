@@ -10,7 +10,8 @@
     "build": "tsc",
     "start": "node ./dist/src/server.js",
     "dev": "concurrently \"tsc -w\" \"nodemon ./src/server.ts\"",
-    "all": "npm run lint:fix && npm run format:fix && npm run build && npm run start"
+    "all": "npm run lint:fix && npm run format:fix && npm run build && npm run start",
+    "seed": "ts-node src/seeds/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -18,14 +19,18 @@
   "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^1.41.3",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "winston": "^3.18.3",
     "zod": "^4.1.12"
   },
@@ -38,6 +43,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.7.0",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
