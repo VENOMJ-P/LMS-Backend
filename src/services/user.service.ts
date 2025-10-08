@@ -1,6 +1,8 @@
 import { User, IUser, UserStatus, UserRole } from '../models/user';
 import { NotFoundError, BadRequestError } from '../utils/Error';
 import logger from '../utils/logger';
+import { sendNotification } from '../utils/notifications';
+import { NotificationType } from '../models/notification';
 
 interface UpdateUserData {
   fullName?: string;
@@ -45,7 +47,7 @@ export class UserService {
   }
 
   async updateUser(userId: string, data: UpdateUserData): Promise<Partial<IUser>> {
-    const user = await User.findById(userId);
+    const user: IUser | null = await User.findById(userId);
 
     if (!user) {
       throw new NotFoundError('User not found');
@@ -58,46 +60,55 @@ export class UserService {
     await user.save();
 
     logger.info(`User updated: ${userId}`);
-
     return user.toSafeObject();
   }
 
-  async blockUser(userId: string, adminId: string): Promise<Partial<IUser>> {
+  async suspendUser(userId: string, adminId: string): Promise<Partial<IUser>> {
     const user = await User.findById(userId);
 
     if (!user) {
       throw new NotFoundError('User not found');
     }
 
-    if (user.status === UserStatus.BLOCKED) {
-      throw new BadRequestError('User is already blocked');
+    if (user.status === UserStatus.SUSPENDED) {
+      throw new BadRequestError('User is already suspended');
     }
 
-    user.status = UserStatus.BLOCKED;
+    user.status = UserStatus.SUSPENDED;
     user.refreshToken = undefined;
     await user.save();
 
-    logger.info(`User blocked: ${userId} by ${adminId}`);
-
+    await sendNotification(
+      user,
+      'Account Suspended',
+      'Your account has been suspended',
+      NotificationType.WARNING
+    );
+    logger.info(`User suspended: ${userId} by ${adminId}`);
     return user.toSafeObject();
   }
 
-  async unblockUser(userId: string, adminId: string): Promise<Partial<IUser>> {
+  async activateUser(userId: string, adminId: string): Promise<Partial<IUser>> {
     const user = await User.findById(userId);
 
     if (!user) {
       throw new NotFoundError('User not found');
     }
 
-    if (user.status !== UserStatus.BLOCKED) {
-      throw new BadRequestError('User is not blocked');
+    if (user.status === UserStatus.ACTIVE) {
+      throw new BadRequestError('User is already active');
     }
 
     user.status = UserStatus.ACTIVE;
     await user.save();
 
-    logger.info(`User unblocked: ${userId} by ${adminId}`);
-
+    await sendNotification(
+      user,
+      'Account Activated',
+      'Your account has been activated',
+      NotificationType.INFO
+    );
+    logger.info(`User activated: ${userId} by ${adminId}`);
     return user.toSafeObject();
   }
 
@@ -109,7 +120,6 @@ export class UserService {
     }
 
     await User.findByIdAndDelete(userId);
-
     logger.info(`User deleted: ${userId}`);
   }
 }

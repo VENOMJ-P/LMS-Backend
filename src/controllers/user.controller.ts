@@ -35,14 +35,14 @@ export class UserController {
     return ApiResponse.success(res, { user }, 'User updated successfully');
   });
 
-  blockUser = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const user = await userService.blockUser(req.params.id, req.user!.userId);
-    return ApiResponse.success(res, { user }, 'User blocked successfully');
+  suspendUser = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const user = await userService.suspendUser(req.params.id, req.user!.userId);
+    return ApiResponse.success(res, { user }, 'User suspended successfully');
   });
 
-  unblockUser = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const user = await userService.unblockUser(req.params.id, req.user!.userId);
-    return ApiResponse.success(res, { user }, 'User unblocked successfully');
+  activateUser = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const user = await userService.activateUser(req.params.id, req.user!.userId);
+    return ApiResponse.success(res, { user }, 'User activated successfully');
   });
 
   deleteUser = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {

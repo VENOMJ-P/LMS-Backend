@@ -22,7 +22,7 @@ export default tseslint.config(
       'no-console': 'off',
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
-      indent: ['error', 2],
+      indent: ['error', 2, { SwitchCase: 1 }],
       'prefer-const': 'error',
       'no-var': 'error',
       'no-unused-vars': 'off',

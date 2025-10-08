@@ -14,14 +14,14 @@ router.get('/', authorize(UserRole.ADMIN), userController.getAllUsers);
 // Get specific user
 router.get('/:id', authorize(UserRole.ADMIN), userController.getUser);
 
-// Update user (Admin only for role/status, self for other fields)
+// Update user (Admin only)
 router.put('/:id', authorize(UserRole.ADMIN), userController.updateUser);
 
-// Block user (Admin only)
-router.post('/:id/block', authorize(UserRole.ADMIN), userController.blockUser);
+// Suspend user (Admin only)
+router.post('/:id/suspend', authorize(UserRole.ADMIN), userController.suspendUser);
 
-// Unblock user (Admin only)
-router.post('/:id/unblock', authorize(UserRole.ADMIN), userController.unblockUser);
+// Activate user (Admin only)
+router.post('/:id/activate', authorize(UserRole.ADMIN), userController.activateUser);
 
 // Delete user (Admin only)
 router.delete('/:id', authorize(UserRole.ADMIN), userController.deleteUser);
