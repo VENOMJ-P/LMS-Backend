@@ -6,6 +6,7 @@ import compression from 'compression';
 import { config } from './configs';
 import { errorHandler } from './middlewares';
 import logger from './utils/logger';
+import api_routes from './routes';
 
 const app = express();
 
@@ -39,6 +40,9 @@ app.get('/health', (_req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// API Routes
+app.use('/api', api_routes);
 
 // 404 handler
 app.use((_req, res) => {
