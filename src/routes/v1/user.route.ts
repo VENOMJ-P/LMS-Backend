@@ -8,8 +8,8 @@ const router = Router();
 // All user routes require authentication
 router.use(authenticate);
 
-// Get all users (Admin only)
-router.get('/', authorize(UserRole.ADMIN), userController.getAllUsers);
+// Get all users (Admin, User)
+router.get('/', authorize(UserRole.ADMIN, UserRole.USER), userController.getAllUsers);
 
 // Get specific user
 router.get('/:id', authorize(UserRole.ADMIN), userController.getUser);

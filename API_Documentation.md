@@ -20,7 +20,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Creates a new user account and sends a welcome email to the provided email address.
-- **Response**: `{ success: true, data: { user, accessToken, refreshToken }, message: "User registered successfully" }`
 
 ### Login User
 
@@ -34,7 +33,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Authenticates a user and returns access and refresh tokens. Updates the user's last login timestamp.
-- **Response**: `{ success: true, data: { user, accessToken, refreshToken }, message: "Login successful" }`
 
 ### Refresh Token
 
@@ -47,7 +45,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Generates a new access token using a valid refresh token.
-- **Response**: `{ success: true, data: { accessToken }, message: "Token refreshed successfully" }`
 
 ## User Routes (Admin Only)
 
@@ -61,14 +58,12 @@ Base URL: `/api/v1`
   - `role`: String (e.g., "admin", "user")
   - `status`: String (e.g., "active", "blocked", "suspended")
 - **Functionality**: Retrieves a paginated list of users, filterable by role and status.
-- **Response**: `{ success: true, data: { users, page, limit, total, totalPages }, message: "Users retrieved successfully" }`
 
 ### Get User by ID
 
 - **URL**: `/users/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific user by ID.
-- **Response**: `{ success: true, data: { user }, message: "User retrieved successfully" }`
 
 ### Update User
 
@@ -84,28 +79,24 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Updates user details (e.g., name, phone, status, role). Sends an in-app notification to the user on status change.
-- **Response**: `{ success: true, data: { user }, message: "User updated successfully" }`
 
 ### Suspend User
 
 - **URL**: `/users/:id/suspend`
 - **Method**: `POST`
 - **Functionality**: Suspends a user, revoking their refresh token. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { user }, message: "User suspended successfully" }`
 
 ### Activate User
 
 - **URL**: `/users/:id/activate`
 - **Method**: `POST`
 - **Functionality**: Activates a suspended user. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { user }, message: "User activated successfully" }`
 
 ### Delete User
 
 - **URL**: `/users/:id`
 - **Method**: `DELETE`
 - **Functionality**: Deletes a user permanently from the system.
-- **Response**: `{ success: true, message: "User deleted successfully" }`
 
 ## Book Routes
 
@@ -127,7 +118,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Creates a new book in the library catalog.
-- **Response**: `{ success: true, data: { book }, message: "Book created successfully" }`
 
 ### Get Books
 
@@ -139,14 +129,12 @@ Base URL: `/api/v1`
   - `category`: String (optional)
   - `search`: String (optional, searches title/author)
 - **Functionality**: Retrieves a paginated list of books, filterable by category or search term.
-- **Response**: `{ success: true, data: { books, page, limit, total, totalPages }, message: "Books retrieved successfully" }`
 
 ### Get Book by ID
 
 - **URL**: `/books/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific book by ID.
-- **Response**: `{ success: true, data: { book }, message: "Book retrieved successfully" }`
 
 ### Update Book (Admin Only)
 
@@ -165,14 +153,12 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Updates book details.
-- **Response**: `{ success: true, data: { book }, message: "Book updated successfully" }`
 
 ### Delete Book (Admin Only)
 
 - **URL**: `/books/:id`
 - **Method**: `DELETE`
 - **Functionality**: Soft deletes a book (marks as deleted).
-- **Response**: `{ success: true, message: "Book deleted successfully" }`
 
 ### Bulk Upload Books (Admin Only)
 
@@ -185,7 +171,6 @@ Base URL: `/api/v1`
     "Book Title","Author Name","Fiction","1234567890",100,3,"Description"
     ```
 - **Functionality**: Uploads multiple books via CSV file.
-- **Response**: `{ success: true, data: { count }, message: "Bulk upload successful" }`
 
 ## Borrowing Routes
 
@@ -202,7 +187,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Borrows a book for an individual or group. Updates book availability and user/group borrowing records. Sends an email and in-app notification with due date.
-- **Response**: `{ success: true, data: { borrowing }, message: "Book borrowed successfully" }`
 
 ### Get Borrowings
 
@@ -214,14 +198,12 @@ Base URL: `/api/v1`
   - `status`: String (e.g., "borrowed", "returned", "overdue", "lost")
   - `borrowType`: String (e.g., "individual", "group")
 - **Functionality**: Retrieves a paginated list of borrowings. Users see their own borrowings; admins see all.
-- **Response**: `{ success: true, data: { borrowings, page, limit, total, totalPages }, message: "Borrowings retrieved successfully" }`
 
 ### Get Borrowing by ID
 
 - **URL**: `/borrowings/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific borrowing. Users can only access their own or group borrowings.
-- **Response**: `{ success: true, data: { borrowing }, message: "Borrowing retrieved successfully" }`
 
 ### Return Book
 
@@ -234,7 +216,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Marks a book as returned, updates availability, and calculates fines if overdue or damaged. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { borrowing }, message: "Book returned successfully" }`
 
 ### Extend Deadline (Admin Only)
 
@@ -247,14 +228,12 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Extends the due date for a borrowing. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { borrowing }, message: "Deadline extended successfully" }`
 
 ### Mark Book as Lost (Admin Only)
 
 - **URL**: `/borrowings/:id/lost`
 - **Method**: `POST`
 - **Functionality**: Marks a book as lost, reduces book copies, and applies a fine. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { borrowing }, message: "Book marked as lost" }`
 
 ## Group Routes
 
@@ -270,7 +249,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Creates a new group with pending status. Sends in-app notifications to all members.
-- **Response**: `{ success: true, data: { group }, message: "Group created successfully" }`
 
 ### Get Groups
 
@@ -281,14 +259,12 @@ Base URL: `/api/v1`
   - `limit`: Number (default: 20)
   - `status`: String (e.g., "pending", "approved", "rejected", "dissolved")
 - **Functionality**: Retrieves a paginated list of groups. Users see groups they are part of; admins see all.
-- **Response**: `{ success: true, data: { groups, page, limit, total, totalPages }, message: "Groups retrieved successfully" }`
 
 ### Get Group by ID
 
 - **URL**: `/groups/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific group. Users can only access groups they are part of.
-- **Response**: `{ success: true, data: { group }, message: "Group retrieved successfully" }`
 
 ### Update Group
 
@@ -302,28 +278,24 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Updates group name or members. Only group leader or admin can update.
-- **Response**: `{ success: true, data: { group }, message: "Group updated successfully" }`
 
 ### Approve Group (Admin Only)
 
 - **URL**: `/groups/:id/approve`
 - **Method**: `POST`
 - **Functionality**: Approves a pending group. Sends email and in-app notifications to group members.
-- **Response**: `{ success: true, data: { group }, message: "Group approved successfully" }`
 
 ### Reject Group (Admin Only)
 
 - **URL**: `/groups/:id/reject`
 - **Method**: `POST`
 - **Functionality**: Rejects a pending group. Sends email and in-app notifications to group members.
-- **Response**: `{ success: true, data: { group }, message: "Group rejected successfully" }`
 
 ### Dissolve Group (Admin Only)
 
 - **URL**: `/groups/:id`
 - **Method**: `DELETE`
 - **Functionality**: Dissolves a group if it has no active borrowings.
-- **Response**: `{ success: true, message: "Group dissolved successfully" }`
 
 ## Fine Routes
 
@@ -336,28 +308,24 @@ Base URL: `/api/v1`
   - `limit`: Number (default: 20)
   - `isPaid`: Boolean (optional)
 - **Functionality**: Retrieves a paginated list of fines. Users see their own fines; admins see all.
-- **Response**: `{ success: true, data: { fines, page, limit, total, totalPages }, message: "Fines retrieved successfully" }`
 
 ### Get Fine by ID
 
 - **URL**: `/fines/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific fine. Users can only access their own fines.
-- **Response**: `{ success: true, data: { fine }, message: "Fine retrieved successfully" }`
 
 ### Pay Fine
 
 - **URL**: `/fines/:id/pay`
 - **Method**: `POST`
 - **Functionality**: Marks a fine as paid. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { fine }, message: "Fine paid successfully" }`
 
 ### Waive Fine (Admin Only)
 
 - **URL**: `/fines/:id/waive`
 - **Method**: `POST`
 - **Functionality**: Waives a fine, setting it to zero. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { fine }, message: "Fine waived successfully" }`
 
 ### Update Fine (Admin Only)
 
@@ -373,7 +341,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Updates fine amounts. Sends an email and in-app notification to the user.
-- **Response**: `{ success: true, data: { fine }, message: "Fine updated successfully" }`
 
 ## Feedback Routes
 
@@ -388,7 +355,6 @@ Base URL: `/api/v1`
   - `rating`: Number (1-5)
   - `image`: File (optional, jpg/png, max 5MB)
 - **Functionality**: Submits feedback for a book with an optional image upload to Cloudinary. Sends an in-app notification to the user.
-- **Response**: `{ success: true, data: { feedback }, message: "Feedback submitted successfully" }`
 
 ### Get Feedbacks
 
@@ -399,28 +365,24 @@ Base URL: `/api/v1`
   - `limit`: Number (default: 20)
   - `bookId`: String (optional)
 - **Functionality**: Retrieves a paginated list of feedbacks, filterable by book.
-- **Response**: `{ success: true, data: { feedbacks, page, limit, total, totalPages }, message: "Feedbacks retrieved successfully" }`
 
 ### Get Feedback by ID
 
 - **URL**: `/feedbacks/:id`
 - **Method**: `GET`
 - **Functionality**: Retrieves details of a specific feedback. Users can only access their own feedback.
-- **Response**: `{ success: true, data: { feedback }, message: "Feedback retrieved successfully" }`
 
 ### Delete Feedback
 
 - **URL**: `/feedbacks/:id`
 - **Method**: `DELETE`
 - **Functionality**: Deletes a feedback. Users can only delete their own feedback. Sends an in-app notification.
-- **Response**: `{ success: true, message: "Feedback deleted successfully" }`
 
 ### Get Feedback Analytics (Admin Only)
 
 - **URL**: `/feedbacks/analytics`
 - **Method**: `GET`
 - **Functionality**: Retrieves average ratings and feedback counts per book.
-- **Response**: `{ success: true, data: { analytics }, message: "Feedback analytics retrieved successfully" }`
 
 ## Notification Routes
 
@@ -433,21 +395,18 @@ Base URL: `/api/v1`
   - `limit`: Number (default: 20)
   - `isRead`: Boolean (optional)
 - **Functionality**: Retrieves a paginated list of in-app notifications for the authenticated user.
-- **Response**: `{ success: true, data: { notifications, page, limit, total, totalPages }, message: "Notifications retrieved successfully" }`
 
 ### Mark Notification as Read
 
 - **URL**: `/notifications/:id/read`
 - **Method**: `POST`
 - **Functionality**: Marks a specific notification as read.
-- **Response**: `{ success: true, message: "Notification marked as read" }`
 
 ### Mark All Notifications as Read
 
 - **URL**: `/notifications/read-all`
 - **Method**: `POST`
 - **Functionality**: Marks all notifications for the user as read.
-- **Response**: `{ success: true, message: "All notifications marked as read" }`
 
 ## Settings Routes (Admin Only)
 
@@ -456,7 +415,6 @@ Base URL: `/api/v1`
 - **URL**: `/settings`
 - **Method**: `GET`
 - **Functionality**: Retrieves system-wide settings (e.g., borrow days, fine rates).
-- **Response**: `{ success: true, data: { settings }, message: "Settings retrieved successfully" }`
 
 ### Update Settings
 
@@ -476,7 +434,6 @@ Base URL: `/api/v1`
   }
   ```
 - **Functionality**: Updates system settings.
-- **Response**: `{ success: true, data: { settings }, message: "Settings updated successfully" }`
 
 ## Report Routes (Admin Only)
 
@@ -488,7 +445,6 @@ Base URL: `/api/v1`
   - `type`: String (required, e.g., "books", "borrowings", "fines", "users", "groups", "feedbacks")
   - `format`: String (required, e.g., "json", "csv", "pdf")
 - **Functionality**: Generates a report in the specified format (JSON, CSV, or PDF) for the given type. CSV and PDF are downloadable.
-- **Response**:
   - JSON: `{ success: true, data: { report }, message: "Report generated successfully" }`
   - CSV: Text file download
   - PDF: PDF file download
@@ -500,7 +456,6 @@ Base URL: `/api/v1`
 - **URL**: `/health`
 - **Method**: `GET`
 - **Functionality**: Checks if the server is running. No authentication required.
-- **Response**: `{ success: true, message: "Server is running", timestamp: "ISO string" }`
 
 ## Notes
 

@@ -8,9 +8,13 @@ import { UserRole } from '../../models/user';
 const router = Router();
 
 router.use(authenticate);
-router.use(authorize(UserRole.ADMIN));
 
 router.get('/', settingsController.getSettings);
-router.put('/', validate(updateSettingsSchema), settingsController.updateSettings);
+router.put(
+  '/',
+  authorize(UserRole.ADMIN),
+  validate(updateSettingsSchema),
+  settingsController.updateSettings
+);
 
 export default router;
