@@ -24,7 +24,7 @@ export class FeedbackService {
       book: data.bookId,
       title: data.title,
       comment: data.comment,
-      rating: data.rating,
+      rating: Number(data.rating),
       image: data.image
     });
 
