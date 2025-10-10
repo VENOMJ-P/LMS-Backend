@@ -34,7 +34,7 @@ export class GroupService {
       name: data.name,
       leader: userId,
       members: data.memberIds,
-      status: GroupStatus.PENDING
+      status: GroupStatus.APPROVED
     });
 
     for (const user of users) {

@@ -43,7 +43,7 @@ const groupSchema = new Schema<IGroup>(
     status: {
       type: String,
       enum: Object.values(GroupStatus),
-      default: GroupStatus.PENDING
+      default: GroupStatus.APPROVED
     }
   },
   {

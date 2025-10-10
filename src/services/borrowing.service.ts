@@ -36,6 +36,7 @@ export class BorrowingService {
 
     // Validate borrowing limits
     if (data.borrowType === BorrowType.INDIVIDUAL) {
+      console.log(user.currentBorrowings.length, settings.maxBooksPerUser);
       if (user.currentBorrowings.length >= settings.maxBooksPerUser) {
         throw new BadRequestError('Borrowing limit reached');
       }
